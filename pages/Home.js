@@ -5,39 +5,62 @@ import {
   StyleSheet,
   TextInput,
   FlatList,
+  Image,
   TouchableOpacity,
 } from "react-native";
 import Icon from "react-native-vector-icons/FontAwesome";
 import axios from "axios";
 
-const teachers = [
-  { id: 1, name: "Teacher 1", age: 30, address: "123 Main St" },
-  { id: 2, name: "Teacher 2", age: 35, address: "456 Elm St" },
-  { id: 3, name: "Teacher 3", age: 28, address: "789 Oak St" },
-  { id: 4, name: "Teacher 4", age: 28, address: "789 Oak St1" },
-
-  // Thêm dữ liệu giáo viên ở đây
-];
+import Cartegory from "../components/Category/Category";
+import CourseView from "../components/courseView/courseView";
 
 const HomeScreen = () => {
-  const handleViewDetail = (teacher) => {
-    console.log(`View detail for ${teacher.name}`);
-  };
+  const [searchKeyword, setSearchKeyword] = useState("");
   const [data, setData] = useState([]);
+  const [dataSearch, setDataSearch] = useState([]);
+  const [filteredTeachers, setFilteredTeachers] = useState([]);
 
-  const getMovies = async () => {
-    try {
-      const response = await axios.get("http://localhost:4000/api/teacher");
-      setData(response.data.result);
-    } catch (error) {
-      console.error(error);
-    }
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(
+          "http://localhost:4000/api/teacher?limit=10"
+        );
+        setData(response.data.result);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    const fetchDataSearch = async () => {
+      try {
+        const response = await axios.get("http://localhost:4000/api/teacher");
+        setDataSearch(response.data.result);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    fetchData();
+    fetchDataSearch();
+  }, []);
+
+  const handleViewDetail = (teacher) => {
+    console.log(`View detail for ${teacher.first_name} ${teacher.last_name}`);
   };
 
   useEffect(() => {
-    getMovies();
-  }, []);
-  console.log(data);
+    if (searchKeyword) {
+      const filtered = dataSearch.filter((teacher) =>
+        (teacher.first_name + " " + teacher.last_name)
+          .toLowerCase()
+          .includes(searchKeyword.toLowerCase())
+      );
+      setFilteredTeachers(filtered);
+    } else {
+      setFilteredTeachers([]);
+    }
+  }, [searchKeyword, dataSearch]);
+
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -48,39 +71,97 @@ const HomeScreen = () => {
           </View>
           <View style={styles.search}>
             <Icon name="bell" size={24} color="black" style={styles.icon} />
-            <TextInput placeholder="Search" style={styles.searchInput} />
+            <TextInput
+              placeholder="Search"
+              style={styles.searchInput}
+              onChangeText={(text) => setSearchKeyword(text)}
+            />
           </View>
         </View>
       </View>
       <View style={styles.content}>
+        <View style={styles.searchResult}>
+          {searchKeyword && (
+            <FlatList
+              data={filteredTeachers}
+              keyExtractor={(teacher) => teacher.id.toString()}
+              renderItem={({ item }) => (
+                <TouchableOpacity onPress={() => handleViewDetail(item)}>
+                  <View style={styles.searchItem}>
+                    <View style={styles.infor}>
+                      <Image
+                        source={{ uri: item.avatar }} // Đường dẫn đến hình ảnh hồ sơ của giáo viên
+                        style={styles.avatar}
+                      />
+                      <Text style={styles.teacherName}>
+                        {item.first_name + " " + item.last_name}
+                      </Text>
+                    </View>
+                  </View>
+                </TouchableOpacity>
+              )}
+            />
+          )}
+        </View>
+        <View>
+          <View style={styles.block}>
+            <Text style={styles.header1}>Cartegory</Text>
+            <View style={styles.row}>
+              <Cartegory
+                categoryTitle="N4"
+                style={styles.categoryItem}
+              ></Cartegory>
+              <Cartegory
+                categoryTitle="N4"
+                style={styles.categoryItem}
+              ></Cartegory>
+              <Cartegory
+                categoryTitle="N4"
+                style={styles.categoryItem}
+              ></Cartegory>
+            </View>
+          </View>
+
+          <View style={styles.block}>
+            <Text style={styles.header1}>Course</Text>
+            <View style={styles.row}>
+              <CourseView courseTitle="English" coursePrice="60"></CourseView>
+              <CourseView courseTitle="English" coursePrice="60"></CourseView>
+              <CourseView courseTitle="English" coursePrice="60"></CourseView>
+            </View>
+          </View>
+        </View>
         <FlatList
-          data={teachers}
+          data={searchKeyword ? [] : data}
           keyExtractor={(teacher) => teacher.id.toString()}
           renderItem={({ item }) => (
             <View style={styles.teacherItem}>
-              {data.map((teacher) => {
-                console.log(teacher);
-                return (
-                  <View>
-                    <Text style={styles.teacherName}>
-                      {teacher.first_name + " " + teacher.last_name}
-                    </Text>
-                    <Text style={styles.teacherAge}>Email: {teacher.mail}</Text>
-                    <Text style={styles.teacherAddress}>
-                      Gender: {teacher.gender === "0" ? "Male" : "Female"}
-                    </Text>
-                    <TouchableOpacity
-                      onPress={() => handleViewDetail(item)}
-                      style={styles.detailButton}
-                    >
-                      <Text style={styles.buttonText}>View Detail</Text>
-                    </TouchableOpacity>
-                  </View>
-                );
-              })}
+              <View style={styles.infor}>
+                <Image
+                  source={{ uri: item.avatar }} // Đường dẫn đến hình ảnh hồ sơ của giáo viên
+                  style={styles.avatar}
+                />
+                <Text style={styles.teacherName}>
+                  {item.first_name + " " + item.last_name}
+                </Text>
+              </View>
+              <Text style={styles.teacherAge}>Email: {item.mail}</Text>
+              <Text style={styles.teacherAddress}>
+                Gender: {item.gender === "0" ? "Male" : "Female"}
+              </Text>
+              <TouchableOpacity
+                onPress={() => handleViewDetail(item)}
+                style={styles.detailButton}
+              >
+                <Text style={styles.buttonText}>View Detail</Text>
+              </TouchableOpacity>
             </View>
           )}
         />
+      </View>
+
+      <View style={styles.footer}>
+        <Text style={styles.footerText}>© 2023 Learn Japanese</Text>
       </View>
     </View>
   );
@@ -93,13 +174,28 @@ const styles = StyleSheet.create({
   },
   header: {
     height: 150,
-    backgroundColor: "#7752FE",
+    backgroundColor: "#1640D6",
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
     padding: 10,
     borderBottomRightRadius: 20,
     borderBottomLeftRadius: 20,
+  },
+  header1: {
+    margin: 10,
+    fontSize: 20,
+    fontWeight: "bold",
+    textAlign: "left",
+  },
+  row: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    justifyContent: "space-between",
+  },
+  categoryItem: {
+    width: "30%",
+    marginBottom: 10,
   },
   content_wrap: {
     padding: 10,
@@ -113,17 +209,18 @@ const styles = StyleSheet.create({
     color: "white",
   },
   search: {
-    marginTop: 10,
+    marginTop: 20,
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
+    width: "100%",
   },
   icon: {
     marginRight: 10,
     color: "white",
   },
   searchInput: {
-    width: 150,
+    width: 300,
     height: 30,
     borderWidth: 1,
     borderColor: "gray",
@@ -174,6 +271,39 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     color: "white",
+  },
+  searchResult: {
+    maxHeight: 200, // Điều chỉnh độ cao tối đa
+    backgroundColor: "white",
+    padding: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: "#ccc",
+  },
+  searchItem: {
+    padding: 5,
+    borderBottomWidth: 1,
+    borderBottomColor: "#eee",
+  },
+  infor: {
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  avatar: {
+    width: 50,
+    height: 50,
+    borderRadius: 25,
+    marginRight: 20,
+  },
+  footer: {
+    backgroundColor: "#f2f2f2",
+    alignItems: "center",
+    justifyContent: "center",
+    padding: 10,
+  },
+  footerText: {
+    fontSize: 14,
+    color: "#666",
   },
 });
 
