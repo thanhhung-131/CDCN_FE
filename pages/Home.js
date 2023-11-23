@@ -121,15 +121,6 @@ const HomeScreen = () => {
               ></Cartegory>
             </View>
           </View>
-
-          <View style={styles.block}>
-            <Text style={styles.header1}>Course</Text>
-            <View style={styles.row}>
-              <CourseView courseTitle="English" coursePrice="60"></CourseView>
-              <CourseView courseTitle="English" coursePrice="60"></CourseView>
-              <CourseView courseTitle="English" coursePrice="60"></CourseView>
-            </View>
-          </View>
         </View>
         <FlatList
           data={searchKeyword ? [] : data}
@@ -137,10 +128,7 @@ const HomeScreen = () => {
           renderItem={({ item }) => (
             <View style={styles.teacherItem}>
               <View style={styles.infor}>
-                <Image
-                  source={{ uri: item.avatar }} // Đường dẫn đến hình ảnh hồ sơ của giáo viên
-                  style={styles.avatar}
-                />
+                <Image source={{ uri: item.avatar }} style={styles.avatar} />
                 <Text style={styles.teacherName}>
                   {item.first_name + " " + item.last_name}
                 </Text>
