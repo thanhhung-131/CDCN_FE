@@ -44,9 +44,13 @@ const LoginScreen = () => {
     }
   };
 
+  const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+  
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Login</Text>
+      <Text style={styles.title}>Sign in</Text>
+      <Text style={styles.subtitle}>Hi welcome back, you've been missed</Text>
+
       <TextInput
         style={styles.input}
         placeholder="Enter your email"
@@ -56,7 +60,7 @@ const LoginScreen = () => {
       <TextInput
         style={styles.input}
         placeholder="Enter your password"
-        secureTextEntry
+        secureTextEntry={!isPasswordVisible} // them xem mat khau
         value={password}
         onChangeText={(text) => setPassword(text)}
       />
@@ -83,14 +87,21 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "#e0c7a0", // Màu nền da nhẹ nhàng
-    padding: 16,
+    backgroundColor: "#fff", // Màu nền da nhẹ nhàng
+    padding: 45,
+    borderColor: '#3498db', // Màu xanh nhạt của đường viền
+    borderWidth: 5, // Độ dày của đường viền
   },
   title: {
-    fontSize: 24,
+    fontSize: 26,
     fontWeight: "bold",
-    marginBottom: 24,
+    marginBottom: 8,
     color: "#4d382c", // Màu chữ nâu đậm
+  },
+  subtitle:{
+    fontSize: 14,
+    marginBottom: 24,
+    color: "#4d382c",
   },
   input: {
     height: 40,
@@ -103,9 +114,9 @@ const styles = StyleSheet.create({
     color: "#4d382c", // Màu chữ nâu đậm
   },
   button: {
-    backgroundColor: "#a88771", // Màu nền da đậm cho nút
+    backgroundColor: "#0961f5", // Màu nền xanh dương cho nút
     padding: 10,
-    borderRadius: 8,
+    borderRadius: 20,
     width: "100%",
   },
   buttonText: {
@@ -115,7 +126,7 @@ const styles = StyleSheet.create({
   },
   registerText: {
     marginTop: 16,
-    color: "#4d382c", // Màu chữ nâu đậm
+    color: "#0961f5", // Màu chữ xanh dương
     textDecorationLine: "underline",
   },
 });

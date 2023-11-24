@@ -49,7 +49,9 @@ const RegisterScreen = () => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Register</Text>
+      <Text style={styles.title}>Create Account</Text>
+      <Text style={styles.subtitle}>Fill your infomation below</Text>
+
       <TextInput
         style={styles.input}
         placeholder="Enter your first name"
@@ -88,7 +90,7 @@ const RegisterScreen = () => {
           handleRegister(email, password, firstName, lastName, role);
         }}
       >
-        <Text style={styles.buttonText}>Register</Text>
+        <Text style={styles.buttonText}>Sign Up</Text>
       </TouchableOpacity>
     </View>
   );
@@ -99,14 +101,21 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "#e0c7a0", // Màu nền da nhẹ nhàng
-    padding: 16,
+    backgroundColor: "#fff", // Màu nền màu trắng
+    padding: 48,
+    borderColor: '#3498db', // Màu xanh nhạt của đường viền
+    borderWidth: 5, // Độ dày của đường viền
   },
   title: {
     fontSize: 24,
     fontWeight: "bold",
     marginBottom: 24,
     color: "#4d382c", // Màu chữ nâu đậm
+  },
+  subtitle:{
+    fontSize: 14,
+    marginBottom: 24,
+    color: "#4d382c",
   },
   input: {
     height: 40,
@@ -115,11 +124,11 @@ const styles = StyleSheet.create({
     marginBottom: 16,
     padding: 8,
     width: "100%",
-    borderRadius: 8,
+    borderRadius: 20,
     color: "#4d382c", // Màu chữ nâu đậm
   },
   button: {
-    backgroundColor: "#a88771", // Màu nền da đậm cho nút
+    backgroundColor: "#0961f5", // Màu nền xanh dương cho nút
     padding: 10,
     borderRadius: 8,
     width: "100%",

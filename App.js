@@ -6,6 +6,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 import LoginScreen from "./pages/LoginScreen";
 import RegisterScreen from "./pages/RegisterScreen";
 import HomeScreen from "./pages/Home"; // Thêm import này
+import TeacherDetail from "./pages/TeacherDetail";
 
 const Stack = createStackNavigator();
 
