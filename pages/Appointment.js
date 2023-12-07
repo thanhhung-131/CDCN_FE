@@ -28,8 +28,8 @@ const Appointment = () => {
     <View style={styles.container}>
       <Text style={styles.headerText}>New Appointment</Text>
 
-      <Text style={styles.text}>Tên giáo viên: {teacherName}</Text>
-      <Text style={styles.text}>Tên khóa học: {courseName}</Text>
+      <Text style={styles.text}>Teacher: {teacherName}</Text>
+      <Text style={styles.text}>Course: {courseName}</Text>
 
 
       <DateTimePicker
