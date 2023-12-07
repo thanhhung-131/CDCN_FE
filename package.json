@@ -24,6 +24,7 @@
     "react-native-screens": "^3.27.0",
     "react-native-simple-toast": "^3.1.0",
     "react-native-toast-message": "^2.1.7",
+    "react-native-ui-datepicker": "^1.0.10",
     "react-native-web": "~0.19.6",
     "react-navigation": "^5.0.0"
   },
